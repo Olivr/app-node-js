@@ -1,0 +1,3 @@
+general:
+  defaultPort: 3000
+  welcomeName: "kubernetes"

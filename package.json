@@ -1,0 +1,41 @@
+{
+  "name": "app-node-js",
+  "version": "1.0.0",
+  "description": "Production-ready node.js app boilerplate.",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/olivr/app-nodejs.git"
+  },
+  "dependencies": {
+    "express": "^4.17.1",
+    "js-yaml": "^4.1.0"
+  },
+  "author": "Romain Barissat",
+  "license": "Apache-2.0",
+  "devDependencies": {
+    "nodemon": "^2.0.14"
+  },
+  "scripts": {
+    "dev": "yarn dev:local",
+
+    "dev:local": "yarn nodemon --inspect src/index.js",
+    "dev:docker": "yarn docker:cleanup & yarn docker:build:dev && yarn docker:start:dev",
+    "dev:k8s": "yarn k8s:start:dev",
+
+    "docker:build:dev": "docker build --target dev --build-arg node_env=development -t my-app .",
+    "docker:build:debug": "docker build --target debug -t my-app .",
+    "docker:build:prod": "docker build -t my-app .",
+    "docker:start:dev": "docker run -d -p 3001:3000 -p 9230:9229 -v $PWD/src:/app/src:ro my-app",
+    "docker:start:debug": "docker run -d -p 3001:3000 -p 9230:9229 my-app",
+    "docker:start:prod": "docker run -d -p 3001:3000 my-app",
+    "docker:cleanup": "docker rm $(docker stop $(docker ps -a -q --filter ancestor=my-app))",
+    "docker:logs": "docker logs $(docker ps -q --filter ancestor=my-app) -f",
+
+    "k8s:init": "ctlptl create cluster kind --registry=ctlptl-registry",
+    "k8s:destroy": "ctlptl delete cluster kind-kind",
+    "k8s:start:dev": "tilt up",
+    "k8s:start:debug": "tilt up -- --stage debug",
+    "k8s:start:prod": "tilt up -- --stage prod",
+    "k8s:cleanup": "tilt down"
+  }
+}
