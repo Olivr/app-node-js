@@ -7,21 +7,29 @@
     "url": "https://github.com/olivr/app-nodejs.git"
   },
   "dependencies": {
+    "@opentelemetry/api": "^1.0.3",
+    "@opentelemetry/instrumentation-dns": "^0.26.0",
+    "@opentelemetry/instrumentation-express": "^0.26.0",
+    "@opentelemetry/instrumentation-http": "^0.26.0",
+    "@opentelemetry/instrumentation-net": "^0.26.0",
+    "@opentelemetry/instrumentation-pino": "^0.26.0",
+    "@opentelemetry/sdk-node": "^0.26.0",
     "express": "^4.17.1",
-    "js-yaml": "^4.1.0"
+    "js-yaml": "^4.1.0",
+    "pino-http": "^5.8.0",
+    "prom-client": "^14.0.0"
   },
   "author": "Romain Barissat",
   "license": "Apache-2.0",
   "devDependencies": {
-    "nodemon": "^2.0.14"
+    "nodemon": "^2.0.14",
+    "pino-pretty": "^7.1.0"
   },
   "scripts": {
     "dev": "yarn dev:local",
-
     "dev:local": "yarn nodemon --inspect src/index.js",
     "dev:docker": "yarn docker:cleanup & yarn docker:build:dev && yarn docker:start:dev",
     "dev:k8s": "yarn k8s:start:dev",
-
     "docker:build:dev": "docker build --target dev --build-arg node_env=development -t my-app .",
     "docker:build:debug": "docker build --target debug -t my-app .",
     "docker:build:prod": "docker build -t my-app .",
@@ -30,7 +38,6 @@
     "docker:start:prod": "docker run -d -p 3001:3000 my-app",
     "docker:cleanup": "docker rm $(docker stop $(docker ps -a -q --filter ancestor=my-app))",
     "docker:logs": "docker logs $(docker ps -q --filter ancestor=my-app) -f",
-
     "k8s:init": "ctlptl create cluster kind --registry=ctlptl-registry",
     "k8s:destroy": "ctlptl delete cluster kind-kind",
     "k8s:start:dev": "tilt up",
