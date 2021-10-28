@@ -21,6 +21,10 @@ Start developing straight away your app using Node.js and be ready to publish it
 - Multi-stage Docker build with 3 image types
 - Live file updates for faster development feedback
 - Use debugger such as VS Code
+- Full observability suite:
+  - Logging with [Pino](https://getpino.io)
+  - Metrics with [Prom-client](https://github.com/siimon/prom-client)
+  - Tracing with [OpenTelemetry](https://opentelemetry.io)
 
 ## How to use it
 
@@ -88,7 +92,9 @@ yarn k8s:init
 
 #### Kubernetes (slower feedback)
 
-1. Start your app
+1. If you don't have a local cluster yet, create it with `yarn k8s:init`
+
+2. Start your app
 
    ```sh
    yarn dev:k8s
@@ -96,9 +102,9 @@ yarn k8s:init
 
    > The first time will be much slower as it needs to download your base image, push it to your local registry, and finally have k8s download it from your local registry (!)
 
-2. Watch the logs in your terminal by pressing `s` or press `space` to watch them in the Tilt UI
+3. Watch the logs in your terminal by pressing `s` or press `space` to watch them in the Tilt UI
 
-3. View your app
+4. View your app
 
    ```sh
    open http://localhost:3002
@@ -123,3 +129,21 @@ yarn k8s:init
 4. Click on _Start debugging_ (F5)
 5. Refresh your app
 6. You can now use the debugger
+
+### Observability
+
+#### Logs
+
+All logs are on `STDOUT`. They can be scraped by tools like Promtail, Fluent Bit, etc.
+
+#### Metrics
+
+All metrics are accessible on the `/metrics` endpoint (eg. `open http://localhost:3000/metrics`). They can be scraped by Prometheus and other compatible tools.
+
+#### Traces
+
+Traces are sent to a Jaeger instance or any compatible collector such as the [OTEL collector](https://opentelemetry.io/docs/collector/).
+
+1. Start a local Jaeger instance with `yarn jaeger:init`
+2. Open the Jaeger UI located at http://localhost:16686
+3. Make a request to your app (eg. `curl http://localhost:3000`), note the `trace_id` in the logs and search for it in the Jaeger UI
