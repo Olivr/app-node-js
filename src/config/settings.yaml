@@ -1,3 +1,4 @@
 general:
   defaultPort: 3000
-  welcomeName: "world"
+  welcomeName: world
+  serviceName: my-app

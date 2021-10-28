@@ -1,13 +1,11 @@
 const fs = require("fs");
 const path = require("path");
 const yaml = require("js-yaml");
-const { logger } = require("./observability/logger");
+// const { logger } = require("./observability/logger");
 
 try {
-  const settings = yaml.load(
-    fs.readFileSync(path.join(__dirname, "config/settings.yaml"), "utf8")
-  );
+  const settings = yaml.load(fs.readFileSync(path.join(__dirname, "config/settings.yaml"), "utf8"));
   exports.settings = settings;
 } catch (e) {
-  logger.error(e);
+  console.error(e);
 }

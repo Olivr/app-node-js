@@ -1,3 +1,5 @@
+require("./observability/tracer");
+
 const { settings } = require("./settings");
 const express = require("express");
 const expressMeter = require("./observability/meter");
@@ -12,9 +14,6 @@ try {
 
   app.get("/", (req, res) => {
     req.log.info("Visited homepage");
-    req.log.error("Example error");
-    req.log.debug("Example debug");
-    req.log.trace("Example trace");
     res.send(`Hello ${settings.general.welcomeName}!`);
   });
 
