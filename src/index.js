@@ -1,9 +1,8 @@
 require("./observability/tracer");
-
+const { expressLogger, logger } = require("./observability/logger");
+const expressMeter = require("./observability/meter");
 const { settings } = require("./settings");
 const express = require("express");
-const expressMeter = require("./observability/meter");
-const { expressLogger, logger } = require("./observability/logger");
 
 try {
   const port = process.env.PORT || settings.general.defaultPort || 3000;
