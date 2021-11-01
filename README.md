@@ -109,6 +109,10 @@ yarn k8s:init
 
 ## Observability
 
+### Health
+
+Readiness and liveness endpoints are available on `/readyz` and `/livez` ready to be consumed by Kubernetes. (eg. http://localhost:3000/readyz, http://localhost:3000/livez). Additionally, a tool is located in `src/hack/healthcheck.js` to be consumed by Docker's native health check feature.
+
 ### Logs
 
 All logs are on `STDOUT`. They can be scraped by [collectors](#collection).

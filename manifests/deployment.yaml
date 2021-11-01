@@ -9,6 +9,9 @@ spec:
       app: my-app
   template:
     metadata:
+      annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/port: "3000"
       labels:
         app: my-app
     spec:
@@ -32,9 +35,17 @@ spec:
               cpu: 300m
               memory: 512Mi
           readinessProbe:
-            tcpSocket:
+            httpGet:
+              path: /readyz
               port: 3000
             initialDelaySeconds: 5
+            periodSeconds: 10
+          livenessProbe:
+            httpGet:
+              path: /livez
+              port: 3000
+            initialDelaySeconds: 15
+            periodSeconds: 20
           volumeMounts:
             - name: config
               mountPath: /app/config
