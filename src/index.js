@@ -2,6 +2,7 @@ require("./observability/tracer");
 const { expressLogger, logger } = require("./observability/logger");
 const expressMeter = require("./observability/meter");
 const { settings } = require("./settings");
+const { notFoundHandler, errorHandler } = require("./errorHandler");
 const express = require("express");
 
 try {
@@ -16,7 +17,10 @@ try {
     res.send(`Hello ${settings.general.welcomeName}!`);
   });
 
-  app.listen(port, () => {
+  app.use(notFoundHandler);
+  app.use(errorHandler);
+
+  const server = app.listen(port, () => {
     logger.info(`App listening on port ${port}!`);
   });
 } catch (e) {
