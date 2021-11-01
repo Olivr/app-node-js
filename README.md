@@ -55,8 +55,6 @@ yarn k8s:init
    yarn dev
    ```
 
-   > `yarn dev` is an alias for `yarn dev:local`
-
 2. Watch the logs in your terminal
 
 3. View your app on http://localhost:3000
@@ -66,14 +64,10 @@ yarn k8s:init
 1. Start your app
 
    ```sh
-   yarn dev:docker
+   yarn docker:dev
    ```
 
-2. Watch the logs
-
-   ```sh
-   yarn docker:logs
-   ```
+2. Watch the logs in your terminal
 
 3. View your app on http://localhost:3001
 
@@ -84,7 +78,7 @@ yarn k8s:init
 2. Start your app
 
    ```sh
-   yarn dev:k8s
+   yarn k8s:dev
    ```
 
    > The first time will be much slower as it needs to download your base image, push it to your local registry, and finally have k8s download it from your local registry (!)

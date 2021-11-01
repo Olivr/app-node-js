@@ -7,6 +7,7 @@
     "url": "https://github.com/olivr/app-nodejs.git"
   },
   "dependencies": {
+    "@godaddy/terminus": "^4.9.0",
     "@opentelemetry/api": "^1.0.3",
     "@opentelemetry/exporter-jaeger": "^1.0.0",
     "@opentelemetry/instrumentation-express": "^0.26.0",
@@ -27,25 +28,25 @@
     "pino-pretty": "^7.1.0"
   },
   "scripts": {
-    "dev": "yarn dev:local | yarn pino-pretty -c -t",
-    "dev:local": "yarn nodemon --inspect src/index.js",
-    "dev:docker": "yarn docker:cleanup & yarn docker:build:dev && yarn docker:start:dev && yarn docker:logs",
-    "dev:k8s": "yarn k8s:start:dev",
-    "docker:build:dev": "docker build --target dev --build-arg node_env=development -t my-app .",
-    "docker:build:debug": "docker build --target debug -t my-app .",
-    "docker:build:prod": "docker build -t my-app .",
-    "docker:start:dev": "docker run -d -p 3001:3000 -p 9230:9229 -v $PWD/src:/app/src:ro --env OTEL_EXPORTER_JAEGER_AGENT_HOST=host.docker.internal --add-host host.docker.internal:host-gateway my-app",
-    "docker:start:debug": "docker run -d -p 3001:3000 -p 9230:9229 --env OTEL_EXPORTER_JAEGER_AGENT_HOST=host.docker.internal --add-host host.docker.internal:host-gateway my-app",
-    "docker:start:prod": "docker run -d -p 3001:3000 --env OTEL_EXPORTER_JAEGER_AGENT_HOST=host.docker.internal --add-host host.docker.internal:host-gateway my-app",
+    "dev": "yarn nodemon --inspect src/index.js | yarn pino-pretty -c -t",
     "docker:cleanup": "docker rm $(docker stop $(docker ps -a -q --filter ancestor=my-app))",
+    "docker:debug": "yarn docker:cleanup; yarn docker:debug:build && yarn docker:debug:start && yarn docker:logs",
+    "docker:debug:build": "docker build --target debug -t my-app .",
+    "docker:debug:start": "docker run -d -p 3001:3000 -p 9230:9229 --env OTEL_EXPORTER_JAEGER_AGENT_HOST=host.docker.internal --add-host host.docker.internal:host-gateway my-app",
+    "docker:dev": "yarn docker:cleanup; yarn docker:dev:build && yarn docker:dev:start && yarn docker:logs",
+    "docker:dev:build": "docker build --target dev --build-arg node_env=development -t my-app .",
+    "docker:dev:start": "docker run -d -p 3001:3000 -p 9230:9229 -v $PWD/src:/app/src:ro --env OTEL_EXPORTER_JAEGER_AGENT_HOST=host.docker.internal --add-host host.docker.internal:host-gateway my-app",
     "docker:logs": "docker logs $(docker ps -q --filter ancestor=my-app) -f | yarn pino-pretty -c -t",
-    "k8s:init": "ctlptl create cluster kind --registry=ctlptl-registry",
-    "k8s:destroy": "ctlptl delete cluster kind-kind",
-    "k8s:start:dev": "tilt up",
-    "k8s:start:debug": "tilt up -- --stage debug",
-    "k8s:start:prod": "tilt up -- --stage prod",
-    "k8s:cleanup": "tilt down",
+    "docker:prod": "yarn docker:cleanup; yarn docker:prod:build && yarn docker:prod:start && yarn docker:logs",
+    "docker:prod:build": "docker build -t my-app .",
+    "docker:prod:start": "docker run -d -p 3001:3000 --env OTEL_EXPORTER_JAEGER_AGENT_HOST=host.docker.internal --add-host host.docker.internal:host-gateway my-app",
+    "jaeger:destroy": "docker rm $(docker stop jaeger)",
     "jaeger:init": "docker run -d --name jaeger -e COLLECTOR_ZIPKIN_HOST_PORT=:9411 -p 5775:5775/udp -p 6831:6831/udp -p 6832:6832/udp -p 5778:5778 -p 16686:16686 -p 14268:14268 -p 14250:14250 -p 9411:9411 jaegertracing/all-in-one:latest",
-    "jaeger:destroy": "docker rm $(docker stop jaeger)"
+    "k8s:cleanup": "tilt down",
+    "k8s:debug": "tilt up -- --stage debug",
+    "k8s:destroy": "ctlptl delete cluster kind-kind",
+    "k8s:dev": "tilt up",
+    "k8s:init": "ctlptl create cluster kind --registry=ctlptl-registry",
+    "k8s:prod": "tilt up -- --stage prod"
   }
 }
