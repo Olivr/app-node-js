@@ -1,0 +1,6 @@
+# https://docs.tilt.dev/api.html
+# https://docs.bazel.build/versions/main/skylark/language.html
+
+# Deploy jaeger
+k8s_yaml('jaeger.yaml')
+k8s_resource('jaeger', port_forwards=[port_forward(16687, 16686, name='Jaeger UI')])

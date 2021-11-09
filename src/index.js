@@ -5,13 +5,13 @@ const expressMeter = require("./observability/meter");
 const healthOptions = require("./observability/health");
 const { createTerminus } = require("@godaddy/terminus");
 
-const { settings } = require("./settings");
+// Express server
 const http = require("http");
 const express = require("express");
 const { notFoundHandler, errorHandler } = require("./errorHandler");
 
 try {
-  const port = process.env.PORT || settings.general.defaultPort || 3000;
+  const port = process.env.PORT || 3000;
   const app = express();
 
   app.use(expressLogger);
@@ -19,7 +19,7 @@ try {
 
   app.get("/", (req, res) => {
     req.log.info("Visited homepage");
-    res.send(`Hello ${settings.general.welcomeName}!`);
+    res.send(`Hello world!`);
   });
 
   app.use(notFoundHandler);

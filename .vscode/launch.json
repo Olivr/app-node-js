@@ -8,28 +8,25 @@
       "name": "Local: Attach to Node.js",
       "type": "node",
       "request": "attach",
-      "port": 9229,
       "restart": true,
       "skipFiles": ["<node_internals>/**"]
     },
     {
-      "name": "Docker: Attach to Node.js",
+      "name": "Docker/k8s (dev): Attach to Node.js",
       "type": "node",
       "request": "attach",
-      "port": 9230,
       "restart": true,
       "skipFiles": ["<node_internals>/**"],
-      "localRoot": "${workspaceFolder}",
-      "remoteRoot": "/app"
+      "localRoot": "${workspaceFolder}/src",
+      "remoteRoot": "/app/src"
     },
     {
-      "name": "K8s: Attach to Node.js",
+      "name": "Docker/k8s (debug): Attach to Node.js",
       "type": "node",
       "request": "attach",
-      "port": 9231,
       "restart": true,
       "skipFiles": ["<node_internals>/**"],
-      "localRoot": "${workspaceFolder}",
+      "localRoot": "${workspaceFolder}/src",
       "remoteRoot": "/app"
     }
   ]

@@ -1,0 +1,37 @@
+# https://fly.io/docs/reference/configuration/
+
+kill_signal = "SIGTERM"
+kill_timeout = 30
+
+[metrics]
+  port = 3000
+  path = "/metrics"
+
+[[services]]
+  internal_port = 3000
+  processes = ["app"]
+  protocol = "tcp"
+
+  [services.concurrency]
+    hard_limit = 25
+    soft_limit = 20
+    type = "connections"
+
+  [[services.ports]]
+    handlers = ["http"]
+    port = 80
+
+  [[services.ports]]
+    handlers = ["tls", "http"]
+    port = 443
+
+  [[services.http_checks]]
+    interval = 10000
+    grace_period = "5s"
+    method = "get"
+    path = "/livez"
+    protocol = "http"
+    timeout = 2000
+
+[experimental]
+  auto_rollback = true

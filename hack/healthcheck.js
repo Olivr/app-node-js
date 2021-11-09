@@ -5,13 +5,11 @@
  * This script does the same as the above command but doesn't require an external binary to perform the health check
  */
 
-const { settings } = require("../settings");
-
 require("http")
   .request(
     {
       host: "localhost",
-      port: process.env.PORT || settings.general.defaultPort || 3000,
+      port: process.env.PORT || 3000,
       timeout: 2000,
       path: "/livez",
     },

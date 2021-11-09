@@ -4,7 +4,13 @@
   "description": "Production-ready node.js app boilerplate.",
   "repository": {
     "type": "git",
-    "url": "https://github.com/olivr/app-nodejs.git"
+    "url": "https://github.com/olivr/app-node-js.git"
+  },
+  "engines": {
+    "node": "16"
+  },
+  "config": {
+    "image": "docker.io/olivr/app-node-js"
   },
   "dependencies": {
     "@godaddy/terminus": "^4.9.0",
@@ -17,36 +23,34 @@
     "@opentelemetry/sdk-node": "^0.26.0",
     "@opentelemetry/sdk-trace-base": "^1.0.0",
     "express": "^4.17.1",
-    "js-yaml": "^4.1.0",
-    "pino-http": "^5.8.0",
-    "prom-client": "^14.0.0"
+    "pino-http": "^5.8.0 <6",
+    "prom-client": "^14.0.1"
   },
   "author": "Romain Barissat",
   "license": "Apache-2.0",
   "devDependencies": {
     "nodemon": "^2.0.14",
-    "pino-pretty": "^7.1.0"
+    "pino-pretty": "^7.2.0"
   },
   "scripts": {
-    "dev": "yarn nodemon --inspect src/index.js | yarn pino-pretty -c -t",
-    "docker:cleanup": "docker rm $(docker stop $(docker ps -a -q --filter ancestor=my-app))",
-    "docker:debug": "yarn docker:cleanup; yarn docker:debug:build && yarn docker:debug:start && yarn docker:logs",
-    "docker:debug:build": "docker build --target debug -t my-app .",
-    "docker:debug:start": "docker run -d -p 3001:3000 -p 9230:9229 --env OTEL_EXPORTER_JAEGER_AGENT_HOST=host.docker.internal --add-host host.docker.internal:host-gateway my-app",
-    "docker:dev": "yarn docker:cleanup; yarn docker:dev:build && yarn docker:dev:start && yarn docker:logs",
-    "docker:dev:build": "docker build --target dev --build-arg node_env=development -t my-app .",
-    "docker:dev:start": "docker run -d -p 3001:3000 -p 9230:9229 -v $PWD/src:/app/src:ro --env OTEL_EXPORTER_JAEGER_AGENT_HOST=host.docker.internal --add-host host.docker.internal:host-gateway my-app",
-    "docker:logs": "docker logs $(docker ps -q --filter ancestor=my-app) -f | yarn pino-pretty -c -t",
-    "docker:prod": "yarn docker:cleanup; yarn docker:prod:build && yarn docker:prod:start && yarn docker:logs",
-    "docker:prod:build": "docker build -t my-app .",
-    "docker:prod:start": "docker run -d -p 3001:3000 --env OTEL_EXPORTER_JAEGER_AGENT_HOST=host.docker.internal --add-host host.docker.internal:host-gateway my-app",
+    "dev": "yarn docker:stop; OTEL_EXPORTER_JAEGER_ENDPOINT=http://localhost:14268/api/traces yarn nodemon --inspect src/index.js | yarn pino-pretty -c -t",
+    "docker:cleanup": "echo '=> Deleting existing container...'; (docker rm $(docker ps -a -q --filter ancestor=$npm_package_config_image)) &>/dev/null || echo '=> No container to delete.'",
+    "docker:debug": "yarn docker:stop; yarn docker:debug:build && yarn docker:debug:start && yarn docker:logs",
+    "docker:debug:build": "docker build --target debug --build-arg node_version=$npm_package_engines_node -t $npm_package_config_image .",
+    "docker:debug:start": "docker run --rm -d -p 3000:3000 -p 9229:9229 --env OTEL_EXPORTER_JAEGER_ENDPOINT=http://host.docker.internal:14268/api/traces --add-host host.docker.internal:host-gateway $npm_package_config_image",
+    "docker:dev": "yarn docker:stop; yarn docker:dev:build && yarn docker:dev:start && yarn docker:logs",
+    "docker:dev:build": "docker build --target dev --build-arg node_version=$npm_package_engines_node --build-arg node_env=development -t $npm_package_config_image .",
+    "docker:dev:start": "docker run --rm -d -p 3000:3000 -p 9229:9229 -v $PWD/src:/app/src:ro --env OTEL_EXPORTER_JAEGER_ENDPOINT=http://host.docker.internal:14268/api/traces --add-host host.docker.internal:host-gateway $npm_package_config_image",
+    "docker:logs": "docker logs $(docker ps -q --filter ancestor=$npm_package_config_image) -f | yarn pino-pretty -c -t",
+    "docker:prod": "yarn docker:stop; yarn docker:prod:build && yarn docker:prod:start && yarn docker:logs",
+    "docker:prod:build": "docker build --build-arg node_version=$npm_package_engines_node -t $npm_package_config_image .",
+    "docker:prod:start": "docker run --rm -d -p 3000:3000 --env OTEL_EXPORTER_JAEGER_ENDPOINT=http://host.docker.internal:14268/api/traces --add-host host.docker.internal:host-gateway $npm_package_config_image",
+    "docker:stop": "echo '=> Stopping existing container...'; (docker stop $(docker ps -a -q --filter ancestor=$npm_package_config_image)) &>/dev/null || echo '=> No container to stop.'",
     "jaeger:destroy": "docker rm $(docker stop jaeger)",
-    "jaeger:init": "docker run -d --name jaeger -e COLLECTOR_ZIPKIN_HOST_PORT=:9411 -p 5775:5775/udp -p 6831:6831/udp -p 6832:6832/udp -p 5778:5778 -p 16686:16686 -p 14268:14268 -p 14250:14250 -p 9411:9411 jaegertracing/all-in-one:latest",
+    "jaeger:init": "docker start jaeger || (echo '=> No Jaeger container detected, creating new one...' && docker run -d --name jaeger -e COLLECTOR_ZIPKIN_HOST_PORT=:9411 -p 5775:5775/udp -p 6831:6831/udp -p 6832:6832/udp -p 5778:5778 -p 16686:16686 -p 14268:14268 -p 14250:14250 -p 9411:9411 jaegertracing/all-in-one:latest)",
     "k8s:cleanup": "tilt down",
-    "k8s:debug": "tilt up -- --stage debug",
-    "k8s:destroy": "ctlptl delete cluster kind-kind",
-    "k8s:dev": "tilt up",
-    "k8s:init": "ctlptl create cluster kind --registry=ctlptl-registry",
-    "k8s:prod": "tilt up -- --stage prod"
+    "k8s:debug": "yarn docker:stop; tilt up -- --app_name $npm_package_name --node_version $npm_package_engines_node --stage debug",
+    "k8s:dev": "yarn docker:stop; tilt up -- --app_name $npm_package_name --node_version $npm_package_engines_node",
+    "k8s:prod": "yarn docker:stop; tilt up -- --app_name $npm_package_name --node_version $npm_package_engines_node --stage prod"
   }
 }

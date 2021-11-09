@@ -1,0 +1,20 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+generatorOptions:
+  labels:
+    grafana_dashboard: "true"
+
+configMapGenerator:
+  - name: my-app-dashboard # https://grafana.com/grafana/dashboards/11159
+    files:
+      - dashboard.json
+
+  - name: my-app-dashboard2 # https://github.com/RisingStack/example-prometheus-nodejs/blob/master/grafana-dashboard.json
+    files:
+      - dashboard2.json
+
+  - name: my-app-dashboard3 # https://blog.bespinian.io/posts/creating-grafana-dashboards-for-nodejs-on-kubernetes/
+    files:
+      - dashboard3.json
+# More: https://grafana.com/grafana/dashboards/?search=node.js

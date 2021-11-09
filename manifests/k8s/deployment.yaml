@@ -1,32 +1,37 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: my-app
+  name: app-node-js
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: my-app
+      app: app-node-js
   template:
     metadata:
       annotations:
         prometheus.io/scrape: "true"
         prometheus.io/port: "3000"
       labels:
-        app: my-app
+        app: app-node-js
     spec:
       containers:
-        - name: my-app
-          image: my-app
+        - name: app-node-js
+          image: docker.io/olivr/app-node-js
           imagePullPolicy: IfNotPresent
           ports:
             - name: http
               containerPort: 3000
             - name: debug
               containerPort: 9229
+
           env:
             - name: PORT
               value: "3000"
+            - name: OTEL_EXPORTER_JAEGER_ENDPOINT
+              # value: http://jaeger:14268/api/traces
+              value: http://host.docker.internal:14268/api/traces
+
           resources:
             requests:
               cpu: 100m
@@ -34,22 +39,17 @@ spec:
             limits:
               cpu: 300m
               memory: 512Mi
+
           readinessProbe:
             httpGet:
               path: /readyz
               port: 3000
             initialDelaySeconds: 5
             periodSeconds: 10
+
           livenessProbe:
             httpGet:
               path: /livez
               port: 3000
             initialDelaySeconds: 15
             periodSeconds: 20
-          volumeMounts:
-            - name: config
-              mountPath: /app/config
-      volumes:
-        - name: config
-          configMap:
-            name: my-app-config
