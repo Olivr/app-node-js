@@ -9,11 +9,13 @@ const { createTerminus } = require("@godaddy/terminus");
 const http = require("http");
 const express = require("express");
 const { notFoundHandler, errorHandler } = require("./errorHandler");
+const { createMiddleware } = require("@promster/express");
 
 try {
   const port = process.env.PORT || 3000;
   const app = express();
 
+  app.use(createMiddleware({ app }));
   app.use(expressLogger);
   app.use(expressMeter);
 

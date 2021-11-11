@@ -1,14 +1,12 @@
 const express = require("express");
-const prometheus = require("prom-client");
-
-const register = new prometheus.Registry();
-prometheus.collectDefaultMetrics({ register });
+const { getSummary, getContentType } = require("@promster/express");
 
 const router = express.Router();
 router.get("/metrics", async (req, res) => {
   try {
-    res.set("Content-Type", register.contentType);
-    res.end(await register.metrics());
+    req.statusCode = 200;
+    res.setHeader("Content-Type", getContentType());
+    res.end(await getSummary());
   } catch (e) {
     req.log.error(e);
     res.status(500).end(e);
