@@ -5,8 +5,8 @@ config.define_string('node_version')
 config.define_string('infra_tiltfile')
 buildStage=config.parse().get('stage', 'dev')
 nodeEnv=config.parse().get('node_env', 'development' if buildStage == 'dev' else 'production')
-nodeVersion=config.parse().get('node_version', '')
-appName=config.parse().get('app_name', '')
+nodeVersion=config.parse().get('node_version', '16')
+appName=config.parse().get('app_name', 'app-node-js')
 infraTiltfile=config.parse().get('infra_tiltfile', '')
 
 # Deploy additional infrastructure

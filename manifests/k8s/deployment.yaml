@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
         - name: app-node-js
-          image: docker.io/olivr/app-node-js
+          image: app-node-js
           imagePullPolicy: IfNotPresent
           ports:
             - name: http
@@ -29,8 +29,8 @@ spec:
             - name: PORT
               value: "3000"
             - name: OTEL_EXPORTER_JAEGER_ENDPOINT
-              # value: http://jaeger:14268/api/traces
               value: http://host.docker.internal:14268/api/traces
+              # value: http://jaeger:14268/api/traces
 
           resources:
             requests:

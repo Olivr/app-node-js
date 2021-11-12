@@ -21,38 +21,28 @@
 5. Release your app `heroku container:release web`
 6. View your app `heroku open`
 
-> Note this will will create another build of your image locally (though using cache)
+> Note this will create another build of your image locally (though using cache)
 
 ## Kubernetes
 
 > Keep things organized by managing your deployments in a `deploy` folder (or even better in a specific "ops" repo if you have several apps/services)
 
-1. Create the following files in `./deploy/prod`
+1. Create the following file in `./deploy/prod/kustomization.yaml` (replace with the correct registry url from your [release](release.md))
 
    - ```yaml
-     # app-node-js-prod.yaml
-     apiVersion: apps/v1
-     kind: Deployment
-     metadata:
-       name: app-node-js
-     spec:
-       replicas: 3
-       containers:
-         - name: app-node-js
-           image: docker.io/olivr/app-node-js
-     ```
-
-   - ```yaml
-     # kustomization.yaml
      apiVersion: kustomize.config.k8s.io/v1beta1
      kind: Kustomization
      resources:
        - ../../manifests/k8s
-     patchesStrategicMerge:
-       - app-node-js-prod.yaml
+     images:
+       - name: app-node-js
+         newName: <registry>/<your_username>/app-node-js
+         newTag: v1
      ```
 
 2. Apply to your cluster `kubectl apply -k ./deploy/prod`
+
+> This is just the simplest example deployment, you could add so many other things like a [horizontal pod autoscaler](https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/), [service monitor](https://github.com/prometheus-operator/prometheus-operator/blob/main/Documentation/user-guides/getting-started.md), make use of [canary deployments](https://flagger.app/), etc.
 
 ---
 
