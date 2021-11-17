@@ -16,6 +16,11 @@ You can work on your app in three ways:
 - [Kubectl](https://kubernetes.io/docs/tasks/tools/)
 - [Tilt](https://docs.tilt.dev/install.html)
 
+Optional:
+
+- [GitHub CLI](https://cli.github.com/)
+- [CoSign](https://github.com/sigstore/cosign)
+
 ### Kubernetes
 
 You need to start your local cluster before you can use the `yarn k8s:` commands.
