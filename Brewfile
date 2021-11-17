@@ -1,3 +1,8 @@
+# Optional
+brew "cosign"
+brew "gh"
+
+# Required
 tap "tilt-dev/tap"
 
 brew "kubernetes-cli"

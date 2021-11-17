@@ -20,7 +20,7 @@ Production-ready Node.js app.
 2. Clone your repo to your computer
 3. Search and replace `app-node-js` with your app name (this should update `package.json`, k8s manifests, docs)
 4. Search and replace `your app` with your app title (this should update docs)
-5. Remove this "Getting started" section
+5. Remove this **Getting started** section
 6. Commit your changes!
 
 ## [Develop](docs/development.md)
