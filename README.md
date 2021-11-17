@@ -12,6 +12,7 @@ Production-ready Node.js app.
 - Pre-configured VS Code debugger
 - Full observability (health, logs, metrics, traces)
 - Graceful shutdowns
+- Auto-publish signed images
 - Example deployments to Kubernetes, Heroku and Fly
 
 ## Getting started
