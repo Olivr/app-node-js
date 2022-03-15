@@ -54,10 +54,11 @@ jobs:
         env:
           NODE_VERSION: ${{ steps.node_version.outputs.version }}
 
-      - name: Verify base image provenance
-        run: cosign verify-attestation --key .keys/distroless.pub gcr.io/distroless/nodejs:$NODE_VERSION
-        env:
-          NODE_VERSION: ${{ steps.node_version.outputs.version }}
+      # https://github.com/GoogleContainerTools/distroless/issues/975
+      # - name: Verify base image provenance
+      #   run: cosign verify-attestation --key .keys/distroless.pub gcr.io/distroless/nodejs:$NODE_VERSION
+      #   env:
+      #     NODE_VERSION: ${{ steps.node_version.outputs.version }}
 
       - name: Build and push
         uses: docker/build-push-action@v2
