@@ -13,7 +13,7 @@
     "@godaddy/terminus": "^4.9.0",
     "@opentelemetry/api": "^1.0.3",
     "@opentelemetry/exporter-jaeger": "^1.0.0",
-    "@opentelemetry/instrumentation-express": "^0.26.0",
+    "@opentelemetry/instrumentation-express": "^0.28.0",
     "@opentelemetry/instrumentation-http": "^0.26.0",
     "@opentelemetry/instrumentation-pino": "^0.26.0",
     "@opentelemetry/resources": "^1.0.0",
