@@ -19,7 +19,7 @@
     "@opentelemetry/resources": "^1.0.0",
     "@opentelemetry/sdk-node": "^0.26.0",
     "@opentelemetry/sdk-trace-base": "^1.0.0",
-    "@promster/express": "^7.0.0",
+    "@promster/express": "^7.0.5",
     "express": "^4.17.1",
     "pino-http": "^5.8.0 <6",
     "prom-client": "^14.0.1"
