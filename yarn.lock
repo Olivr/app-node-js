@@ -2,10 +2,10 @@
 # yarn lockfile v1
 
 
-"@godaddy/terminus@^4.9.0":
-  version "4.9.0"
-  resolved "https://registry.yarnpkg.com/@godaddy/terminus/-/terminus-4.9.0.tgz#c7de0b45ede05116854d1461832dd05df169f689"
-  integrity sha512-j1E22ZK5jW+DVb2vIEOx9I6epWT/geJyWzuxsUThyPcds5UxjCBeKcDTtNVkoWLRASM49o9OKRrCKKybX7z9bw==
+"@godaddy/terminus@^4.10.2":
+  version "4.10.2"
+  resolved "https://registry.yarnpkg.com/@godaddy/terminus/-/terminus-4.10.2.tgz#7ed17253fb6a24fe4e834b461a57bbeac8b00ddc"
+  integrity sha512-xzNSk6yL3tbeD/vtmHlrBbxflmmbdBKT89rM4b10H5LeaBjBFgG6CsDPTb6CdZHdwipZl1Rxn5RDH5UbCLf8Qw==
   dependencies:
     stoppable "^1.1.0"
 
