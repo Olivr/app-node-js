@@ -15,7 +15,7 @@
     "@opentelemetry/exporter-jaeger": "^1.0.0",
     "@opentelemetry/instrumentation-express": "^0.26.0",
     "@opentelemetry/instrumentation-http": "^0.26.0",
-    "@opentelemetry/instrumentation-pino": "^0.26.0",
+    "@opentelemetry/instrumentation-pino": "^0.28.1",
     "@opentelemetry/resources": "^1.0.0",
     "@opentelemetry/sdk-node": "^0.26.0",
     "@opentelemetry/sdk-trace-base": "^1.0.0",
