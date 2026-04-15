@@ -23,7 +23,7 @@ CMD ["--inspect=0.0.0.0", "src/index.js"]
 
 # Stage "debug": Stripped down OS + busybox shell + files required to run app
 # Used for debugging in a prod-like container
-FROM gcr.io/distroless/nodejs:${node_version}-debug AS debug
+FROM gcr.io/distroless/nodejs${node_version}-debian12:debug AS debug
 HEALTHCHECK --interval=10s CMD ["/nodejs/bin/node", "hack/healthcheck.js"]
 EXPOSE 3000
 EXPOSE 9229
@@ -36,7 +36,7 @@ CMD ["--inspect=0.0.0.0", "index.js"]
 
 # Stage "prod": Stripped down OS + files required to run app
 # Used for running app in production
-FROM gcr.io/distroless/nodejs:${node_version} AS prod
+FROM gcr.io/distroless/nodejs${node_version}-debian12 AS prod
 EXPOSE 3000
 HEALTHCHECK --interval=10s CMD ["/nodejs/bin/node", "hack/healthcheck.js"]
 WORKDIR /app
