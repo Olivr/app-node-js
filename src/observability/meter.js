@@ -1,5 +1,5 @@
 const express = require("express");
-const { getSummary, getContentType } = require("@promster/express");
+const { getSummary, getContentType } = require("@promster/metrics");
 
 const router = express.Router();
 router.get("/metrics", async (req, res) => {
